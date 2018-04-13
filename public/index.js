@@ -1,4 +1,8 @@
+// AUDIO SETUP
+
 const audioContext = new (window.AudioContext || window.webkitAudioContext);
+
+// OSCILLATORS
 const sine1 = audioContext.createOscillator();
 const gain1 = audioContext.createGain();
 sine1.connect(gain1);
@@ -19,8 +23,15 @@ const sine5 = audioContext.createOscillator();
 const gain5 = audioContext.createGain();
 sine5.connect(gain5);
 
-const master = audioContext.createGain();
+const oscillators = [sine1, sine2, sine3, sine4, sine5];
 
+
+// MASTER VOLUME
+const master = audioContext.createGain();
+// initalise master at 0 volume
+master.gain.setValueAtTime(0, audioContext.currentTime);
+
+// connect Oscillators to Master
 for (let gain of [gain1, gain2, gain3, gain4, gain5]){
   gain.gain = 0.2;
   gain.connect(master);
@@ -28,15 +39,16 @@ for (let gain of [gain1, gain2, gain3, gain4, gain5]){
 
 master.connect(audioContext.destination);
 
-const panner = audioContext.createStereoPanner();
-
-// make 4 more Sines,
-// work out Interval relation
 
 
 
+const startAudio = function(){
+  master.gain.exponentialRampToValueAtTime(0.3, audioContext.currentTime + 2);
+}
 
-// sine1.frequency.value = 500;
+const stopAudio = function(){
+  master.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);
+}
 
 /// GENERIC
 
@@ -136,7 +148,7 @@ const setMusicParameters = function(weather){
   // const freq = scalePressureToFreq(weather.pressure);
   const freq = scaleInput(weather.pressure, 956, 1053, 100, 600);
   sine1.frequency.value = freq;
-  const oscillators = [sine1, sine2, sine3, sine4, sine5];
+
 
   const intervals = [1, 1.333, 1.5, 1.875, 2];
 
@@ -184,19 +196,26 @@ var app = function(){
   const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
   makeRequest(glasgowWeatherURL, getWeatherData);
 
+//  start the oscillators onLoad
+  oscillators.forEach(sine => sine.start());
+
 // // time stuff
 //   let date = new Date();
 //   let hour = date.getHours();
 //   let min = date.getMinutes();
 
-// sound stuff
+// // sound stuff
+  const playButton = document.getElementById('play-button');
+  playButton.addEventListener('click', startAudio);
 
+  const stopButton = document.getElementById('stop-button');
+  stopButton.addEventListener('click', stopAudio);
 
-  sine1.start();
-  sine2.start();
-  sine3.start();
-  sine4.start();
-  sine5.start();
+  // sine1.start();
+  // sine2.start();
+  // sine3.start();
+  // sine4.start();
+  // sine5.start();
   // sine1.stop(1);
 
 }
