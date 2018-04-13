@@ -26,6 +26,28 @@ sine5.connect(gain5);
 const oscillators = [sine1, sine2, sine3, sine4, sine5];
 
 
+// LFOs
+const lfo1 = audioContext.createOscillator();
+const lfoGain1 = audioContext.createGain();
+lfo1.connect(lfoGain1);
+const lfo2 = audioContext.createOscillator();
+const lfoGain2 = audioContext.createGain();
+lfo2.connect(lfoGain2);
+
+// Connect LFOS
+// Alternate between LFO 1 & 2 when connecting to Sines
+for (let i = 0; i < oscillators.length; i++){
+  if (i % 2 === 0){
+    lfoGain1.connect(oscillators[i].detune);
+  } else {
+    lfoGain2.connect(oscillators[i].detune);
+  }
+}
+
+const lfos = [lfo1, lfo2];
+
+
+
 // MASTER VOLUME
 const master = audioContext.createGain();
 // initalise master at 0 volume
@@ -47,10 +69,10 @@ const startAudio = function(){
 }
 
 const stopAudio = function(){
-  master.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 2);
+  master.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 2);
 }
 
-/// GENERIC
+/// API REQUESTS
 
 const makeRequest = function(url, callback){
   const request = new XMLHttpRequest();   //  a request object
@@ -158,7 +180,7 @@ const setMusicParameters = function(weather){
 
   // PAN POSITION BY WIND DEGREE ???
   // panner.pan.value = 0.4;
-
+  console.log(weather);
   // set interval
 
   // ...
@@ -198,6 +220,9 @@ var app = function(){
 
 //  start the oscillators onLoad
   oscillators.forEach(sine => sine.start());
+  // sine1.start();
+  lfos.forEach(lfo => lfo.start());
+
 
 // // time stuff
 //   let date = new Date();
@@ -210,13 +235,6 @@ var app = function(){
 
   const stopButton = document.getElementById('stop-button');
   stopButton.addEventListener('click', stopAudio);
-
-  // sine1.start();
-  // sine2.start();
-  // sine3.start();
-  // sine4.start();
-  // sine5.start();
-  // sine1.stop(1);
 
 }
 
