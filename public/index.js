@@ -1,3 +1,7 @@
+const audioContext = new (window.AudioContext || window.webkitAudioContext);
+const sine = audioContext.createOscillator();
+// sine.frequency.value = 500;
+
 /// GENERIC
 
 const makeRequest = function(url, callback){
@@ -16,7 +20,13 @@ const getWeatherData = function(){
   const jsonString = this.responseText;
   const glasgowWeather = JSON.parse(jsonString);
 
-  displayCurrentWeather(glasgowWeather);
+  // Get Useful Weather DATA
+  const weatherData = getCurrentWeather(glasgowWeather);
+
+  // generate HTML tags
+  makeCurrentWeatherHTML(weatherData);
+
+  // do something else with the data
 
   // display current weather
   // display the 24 hrs weather
@@ -24,36 +34,49 @@ const getWeatherData = function(){
 
 }
 
-const displayCurrentWeather = function(weather) {
 
-  const currentForecastTag = document.getElementById('current-weather-forecast');
-
-  // PLACE NAME
-  const placeName = weather.city.name;
-  const locationTag = document.createElement('h3');
-  locationTag.innerText = placeName;
+const getCurrentWeather = function(weather) {
+//  Translates API data into useful format, returns an object
 
   // GET DATA
   const currentWeather = weather.list[0];
   const stats = currentWeather.main;
 
-  const forecastTime = currentWeather.dt_txt;
+  const weatherData = {};
+  // name
+  weatherData.placeName = weather.city.name;
+  // time
+  weatherData.forecastTime = currentWeather.dt_txt;
+  // type
+  weatherData.weatherType = currentWeather.weather[0].main;
+  // stats
+  weatherData.temp = stats.temp;
+  weatherData.pressure = stats.pressure;
+  weatherData.humid = stats.humidity
+  weatherData.clouds = currentWeather.clouds.all;
+  weatherData.rain = currentWeather.rain['3h'];
+  weatherData.windSpeed = currentWeather.wind.speed;
+  weatherData.windDeg = currentWeather.wind.deg;
+
+  return weatherData;
+
+}
+
+const makeCurrentWeatherHTML = function(weather){
+
+  const currentForecastTag = document.getElementById('current-weather-forecast');
+
+  // // PLACE NAME
+  const locationTag = document.createElement('h3');
+  locationTag.innerText = weather.placeName;
+
   const timeTag = document.createElement('h4');
-  timeTag.innerHTML = forecastTime;
+  timeTag.innerHTML = weather.forecastTime;
 
-  const weatherType = currentWeather.weather[0].main;
   const weatherTypeTag = document.createElement('h4');
-  weatherTypeTag.innerText = weatherType;
+  weatherTypeTag.innerText = weather.weatherType;
 
-  const temp = stats.temp;
-  const pressure = stats.pressure;
-  const humid = stats.humidity
-  const clouds = currentWeather.clouds.all;
-  const rain = currentWeather.rain['3h'];
-  const windSpeed = currentWeather.wind.speed;
-  const windDeg = currentWeather.wind.deg;
-
-  const statsArray = [temp, pressure, humid, clouds, rain, windSpeed, windDeg];
+  const statsArray = [weather.temp, weather.pressure, weather.humid, weather.clouds, weather.rain, weather.windSpeed, weather.windDeg];
   const statsLabels = ['Temp: ', "Pressure: ", "Humid: ", "Clouds: ", "Rain: ", "Wind Speed: ", "Wind Deg: "]
 
   const ul = document.getElementById('stats-list');
@@ -67,8 +90,6 @@ const displayCurrentWeather = function(weather) {
   for (let element of [locationTag, timeTag, weatherTypeTag, ul]){
     currentForecastTag.appendChild(element);
   }
-
-  // append them
 
 }
 
@@ -87,22 +108,21 @@ const displayCurrentWeather = function(weather) {
 // WIND .wind
 // RAIN .rain
 
+
 var app = function(){
 
   const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
   makeRequest(glasgowWeatherURL, getWeatherData);
 
-// time stuff
-  let date = new Date();
-  let hour = date.getHours();
-  let min = date.getMinutes();
+// // time stuff
+//   let date = new Date();
+//   let hour = date.getHours();
+//   let min = date.getMinutes();
 
 // sound stuff
-  const audioContext = new (window.AudioContext || window.webkitAudioContext);
-  var sine = audioContext.createOscillator();
-  sine.frequency.value = 100;
-  sine.start();
-  sine.connect(audioContext.destination);
+
+  // sine.start();
+  // sine.connect(audioContext.destination);
   // sine.stop(0.1);
 
 }
