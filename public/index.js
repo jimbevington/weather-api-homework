@@ -92,11 +92,12 @@ var app = function(){
   const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
   makeRequest(glasgowWeatherURL, getWeatherData);
 
+// time stuff
   let date = new Date();
   let hour = date.getHours();
   let min = date.getMinutes();
-  debugger;
 
+// sound stuff
   const audioContext = new (window.AudioContext || window.webkitAudioContext);
   var sine = audioContext.createOscillator();
   sine.frequency.value = 100;
