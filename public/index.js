@@ -27,6 +27,7 @@ const getWeatherData = function(){
   makeCurrentWeatherHTML(weatherData);
 
   // do something else with the data
+  setMusicParameters(weatherData);
 
   // display current weather
   // display the 24 hrs weather
@@ -91,6 +92,32 @@ const makeCurrentWeatherHTML = function(weather){
     currentForecastTag.appendChild(element);
   }
 
+}
+
+const setMusicParameters = function(weather){
+
+  // set the frequency by PRESSURE
+  const freq = scalePressureToFreq(weather.pressure);
+  debugger;
+  // ...
+  // ..
+  // .
+
+}
+
+const scalePressureToFreq = function(inPressure){
+
+  // scale pressures: 956 - 1053 to Freq: 100 - 800
+  const freqMax = 800;
+  const freqMin = 100;
+
+  const pressMax = 1053;
+  const pressMin = 956;
+
+  const percent = (inPressure - pressMin) / (pressMax - pressMin);
+  const result = percent * (freqMax - freqMin) + freqMin;
+
+  return result;
 }
 
 /// INFO I CAN GET:
