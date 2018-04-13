@@ -1,6 +1,12 @@
 const audioContext = new (window.AudioContext || window.webkitAudioContext);
-const sine = audioContext.createOscillator();
-// sine.frequency.value = 500;
+const sine1 = audioContext.createOscillator();
+const panner = audioContext.createStereoPanner();
+
+
+sine1.connect(panner);
+panner.connect(audioContext.destination);
+
+// sine1.frequency.value = 500;
 
 /// GENERIC
 
@@ -97,25 +103,25 @@ const makeCurrentWeatherHTML = function(weather){
 const setMusicParameters = function(weather){
 
   // set the frequency by PRESSURE
-  const freq = scalePressureToFreq(weather.pressure);
-  debugger;
+  // const freq = scalePressureToFreq(weather.pressure);
+  const freq = scaleInput(weather.pressure, 956, 1053, 100, 800);
+  sine1.frequency.value = freq;
+
+  // PAN POSITION BY WIND DEGREE ???
+  // panner.pan.value = 0.4;
+
+  // set interval
+
   // ...
   // ..
   // .
 
 }
 
-const scalePressureToFreq = function(inPressure){
+const scaleInput = function(inAmt, inMin, inMax, outMin, outMax){
 
-  // scale pressures: 956 - 1053 to Freq: 100 - 800
-  const freqMax = 800;
-  const freqMin = 100;
-
-  const pressMax = 1053;
-  const pressMin = 956;
-
-  const percent = (inPressure - pressMin) / (pressMax - pressMin);
-  const result = percent * (freqMax - freqMin) + freqMin;
+  const percent = (inAmt - inMin) / (inMax - inMin);
+  const result = percent * (outMax - outMin) + outMin;
 
   return result;
 }
@@ -148,9 +154,9 @@ var app = function(){
 
 // sound stuff
 
-  // sine.start();
-  // sine.connect(audioContext.destination);
-  // sine.stop(0.1);
+
+  sine1.start();
+  sine1.stop(1);
 
 }
 
