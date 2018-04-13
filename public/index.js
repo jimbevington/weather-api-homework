@@ -5,25 +5,27 @@ const audioContext = new (window.AudioContext || window.webkitAudioContext);
 // OSCILLATORS
 const sine1 = audioContext.createOscillator();
 const gain1 = audioContext.createGain();
-sine1.connect(gain1);
+const pan1 = audioContext.createStereoPanner();
 
 const sine2 = audioContext.createOscillator();
 const gain2 = audioContext.createGain();
-sine2.connect(gain2);
+const pan2 = audioContext.createStereoPanner();
 
 const sine3 = audioContext.createOscillator();
 const gain3 = audioContext.createGain();
-sine3.connect(gain3);
+const pan3 = audioContext.createStereoPanner();
 
 const sine4 = audioContext.createOscillator();
 const gain4 = audioContext.createGain();
-sine4.connect(gain4);
+const pan4 = audioContext.createStereoPanner();
 
 const sine5 = audioContext.createOscillator();
 const gain5 = audioContext.createGain();
-sine5.connect(gain5);
+const pan5 = audioContext.createStereoPanner();
 
 const oscillators = [sine1, sine2, sine3, sine4, sine5];
+const gains = [gain1, gain2, gain3, gain4, gain5];
+const pans = [pan1, pan2, pan3, pan4, pan5];
 
 
 // LFOs
@@ -53,10 +55,13 @@ const master = audioContext.createGain();
 // initalise master at 0 volume
 master.gain.setValueAtTime(0, audioContext.currentTime);
 
-// connect Oscillators to Master
-for (let gain of [gain1, gain2, gain3, gain4, gain5]){
-  gain.gain = 0.2;
-  gain.connect(master);
+
+// ROUTE:  Oscillators > Gains > Pans > Master
+for (let i = 0; i < oscillators.length; i++){
+  oscillators[i].connect(gains[i]);
+  gains[i].connect(pans[i]);
+  gains[i].gain = 0.2;
+  pans[i].connect(master);
 }
 
 master.connect(audioContext.destination);
@@ -166,21 +171,35 @@ const makeCurrentWeatherHTML = function(weather){
 
 const setMusicParameters = function(weather){
 
-  // set the frequency by PRESSURE
-  // const freq = scalePressureToFreq(weather.pressure);
-  const freq = scaleInput(weather.pressure, 956, 1053, 100, 600);
+  // ATMOSPERIC PRESSURE
+  // sets Base Freq
+  const freq = scaleInput(weather.pressure, 956, 1053, 80, 500);
   sine1.frequency.value = freq;
 
-
+  // Hard Coded Intervals
   const intervals = [1, 1.333, 1.5, 1.875, 2];
-
   for (let i = 0; i < oscillators.length; i++){
     oscillators[i].frequency.value = freq * intervals[i];
   }
 
+  // WIND SPEED
+  // sets LFO Freq
+  const lfoFreq = scaleInput(weather.windSpeed, 0.0, 22, 0.06, 3);
+  lfo1.frequency.value = lfoFreq;
+  lfo2.frequency.value = lfoFreq * -1.278;
+
+  // CLOUD COVER
+  // sets LFO Amplitude
+  lfoGain1.gain.value = weather.clouds;
+  lfoGain2.gain.value = weather.clouds * weather.windSpeed;
+
+  // PAN POSITIONS
+  for (let i = 0; i < pans.length; i++){
+    pans[i].pan.value = scaleInput(i, 0, pans.length, -1, 1);
+  }
+
   // PAN POSITION BY WIND DEGREE ???
-  // panner.pan.value = 0.4;
-  console.log(weather);
+  // panner.pan.value = 0.ga4;
   // set interval
 
   // ...
