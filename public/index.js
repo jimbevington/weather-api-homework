@@ -199,7 +199,7 @@ const setMusicParameters = function(weather){
   }
 
   // PAN POSITION BY WIND DEGREE ???
-  // panner.pan.value = 0.ga4;
+  // panner.pan.value = 0.4;
   // set interval
 
   // ...
