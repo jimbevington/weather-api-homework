@@ -16,21 +16,52 @@ const getWeatherData = function(){
   const jsonString = this.responseText;
   const glasgowWeather = JSON.parse(jsonString);
 
-  /// WEATHER FORECAST OVER DAYS
-  // const forecast = glasgowWeather.list;
+  displayCurrentWeather(glasgowWeather);
 
-  /// TODAYS WEATHER
-  // const todaysWeather = glasgowWeather.list[1];
-
-  // CLOUDINESS .clouds
-  // TEMPERATURE .main.temp
-  // PRESSURE .main.pressure
-  // HUMIDITY .main.humidity
-  // WIND .wind
-  // RAIN .rain
+  // display current weather
+  // display the 24 hrs weather
+  // display the weather over 3 days
 
 }
 
+const displayCurrentWeather = function(weather) {
+
+  const currentForecastTag = document.getElementById('current-weather-forecast');
+
+  const placeName = weather.city.name;
+  const locationTag = document.createElement('h3');
+  locationTag.innerText = placeName;
+
+  currentForecastTag.appendChild(locationTag);
+
+  const currentWeather = weather.list[0];
+  const stats = currentWeather.main;
+
+  const forecastTime = currentWeather.dt_txt;
+  const weatherType = currentWeather.weather[0].main;
+  const temp = stats.temp;
+  const pressure = stats.pressure;
+  const humid = stats.humidity
+  const clouds = currentWeather.clouds.all;
+  const rain = currentWeather.rain['3h'];
+  const wind = currentWeather.wind;
+
+}
+
+/// INFO I CAN GET:
+
+/// WEATHER FORECAST OVER DAYS
+// const forecast = glasgowWeather.list;
+
+/// TODAYS WEATHER
+// const todaysWeather = glasgowWeather.list[1];
+
+// CLOUDINESS .clouds
+// TEMPERATURE .main.temp
+// PRESSURE .main.pressure
+// HUMIDITY .main.humidity
+// WIND .wind
+// RAIN .rain
 
 var app = function(){
 
