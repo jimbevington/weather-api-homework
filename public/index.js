@@ -1,10 +1,40 @@
 const audioContext = new (window.AudioContext || window.webkitAudioContext);
 const sine1 = audioContext.createOscillator();
+const gain1 = audioContext.createGain();
+sine1.connect(gain1);
+
+const sine2 = audioContext.createOscillator();
+const gain2 = audioContext.createGain();
+sine2.connect(gain2);
+
+const sine3 = audioContext.createOscillator();
+const gain3 = audioContext.createGain();
+sine3.connect(gain3);
+
+const sine4 = audioContext.createOscillator();
+const gain4 = audioContext.createGain();
+sine4.connect(gain4);
+
+const sine5 = audioContext.createOscillator();
+const gain5 = audioContext.createGain();
+sine5.connect(gain5);
+
+const master = audioContext.createGain();
+
+for (let gain of [gain1, gain2, gain3, gain4, gain5]){
+  gain.gain = 0.2;
+  gain.connect(master);
+}
+
+master.connect(audioContext.destination);
+
 const panner = audioContext.createStereoPanner();
 
+// make 4 more Sines,
+// work out Interval relation
 
-sine1.connect(panner);
-panner.connect(audioContext.destination);
+
+
 
 // sine1.frequency.value = 500;
 
@@ -104,8 +134,15 @@ const setMusicParameters = function(weather){
 
   // set the frequency by PRESSURE
   // const freq = scalePressureToFreq(weather.pressure);
-  const freq = scaleInput(weather.pressure, 956, 1053, 100, 800);
+  const freq = scaleInput(weather.pressure, 956, 1053, 100, 600);
   sine1.frequency.value = freq;
+  const oscillators = [sine1, sine2, sine3, sine4, sine5];
+
+  const intervals = [1, 1.333, 1.5, 1.875, 2];
+
+  for (let i = 0; i < oscillators.length; i++){
+    oscillators[i].frequency.value = freq * intervals[i];
+  }
 
   // PAN POSITION BY WIND DEGREE ???
   // panner.pan.value = 0.4;
@@ -156,7 +193,11 @@ var app = function(){
 
 
   sine1.start();
-  sine1.stop(1);
+  sine2.start();
+  sine3.start();
+  sine4.start();
+  sine5.start();
+  // sine1.stop(1);
 
 }
 
