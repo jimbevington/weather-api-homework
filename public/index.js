@@ -13,7 +13,21 @@ const makeRequest = function(url, callback){
 const getWeatherData = function(){
 
   if(this.status !== 200) return;   // Check if response has worked
-  debugger;
+  const jsonString = this.responseText;
+  const glasgowWeather = JSON.parse(jsonString);
+
+  /// WEATHER FORECAST OVER DAYS
+  // const forecast = glasgowWeather.list;
+
+  /// TODAYS WEATHER
+  // const todaysWeather = glasgowWeather.list[1];
+
+  // CLOUDINESS .clouds
+  // TEMPERATURE .main.temp
+  // PRESSURE .main.pressure
+  // HUMIDITY .main.humidity
+  // WIND .wind
+  // RAIN .rain
 
 }
 
