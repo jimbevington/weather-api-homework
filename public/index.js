@@ -180,6 +180,9 @@ const makeCurrentWeatherHTML = function(weather){
 
   const currentForecastTag = document.getElementById('current-weather-forecast');
 
+  // clear Previous data
+  currentForecastTag.innerHTML = "";
+
   // // PLACE NAME
   const locationTag = document.createElement('h3');
   locationTag.innerText = weather.placeName;
@@ -193,7 +196,7 @@ const makeCurrentWeatherHTML = function(weather){
   const statsArray = [weather.temp, weather.pressure, weather.humid, weather.clouds, weather.rain, weather.windSpeed, weather.windDeg];
   const statsLabels = ['Temp: ', "Pressure: ", "Humid: ", "Clouds: ", "Rain: ", "Wind Speed: ", "Wind Deg: "]
 
-  const ul = document.getElementById('stats-list');
+  const ul = document.createElement('stats-list');
 
   for(let i = 0; i < statsArray.length; i++){
     const li = document.createElement('li');
