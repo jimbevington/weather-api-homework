@@ -205,9 +205,9 @@ const makeCurrentWeatherHTML = function(weather){
     ul.appendChild(li);
   }
 
-  for (let element of [locationTag, timeTag, weatherTypeTag, ul]){
-    currentForecastTag.appendChild(element);
-  }
+  // for (let element of [locationTag, timeTag, weatherTypeTag, ul]){
+  //   currentForecastTag.appendChild(element);
+  // }
 
 }
 

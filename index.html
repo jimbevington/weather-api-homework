@@ -4,6 +4,7 @@
     <title>Country App</title>
     <script src='cityList.js'></script>
     <script src='index.js'></script>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
 
@@ -13,14 +14,19 @@
 
     <h1>Listen to the Weather</h1>
 
-    <div id="current-weather-forecast">
+    <table id="current-weather-forecast">
 
-     <div id="locationTag"></div>
-     <div id="timeTag"></div>
-     <div id="weatherTypeTag"></div>
-     <ul id="stats-list"></ul>
+    <tr>
+      <td class="inline-block" id="locationTag"></td>
+      <td class="inline-block" id="timeTag"></td>
+    </tr>
 
-    </div>
+    <tr>
+    <td><span id="weatherTypeTag"></span></td>
+    <td><ul id="stats-list"></ul></td>
+    </tr>
+
+    </table>
 
     <div id="audio-controls">
       <button id="play-button">Play</button>

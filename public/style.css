@@ -1,0 +1,12 @@
+body {
+  /* background-color: tomato; */
+}
+
+#forecast {
+  display:block;
+}
+
+/* .inline-block {
+  display: inline-block;
+  margin:3em;
+} */
