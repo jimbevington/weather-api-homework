@@ -19,15 +19,22 @@ const pan3 = audioContext.createStereoPanner();
 
 const sine4 = audioContext.createOscillator();
 const gain4 = audioContext.createGain();
-const pan4 = audioContext.createStereoPanner();
+// const pan4 = audioContext.createStereoPanner();
 
 const sine5 = audioContext.createOscillator();
 const gain5 = audioContext.createGain();
-const pan5 = audioContext.createStereoPanner();
+// const pan5 = audioContext.createStereoPanner();
 
-const oscillators = [sine1, sine2, sine3, sine4, sine5];
-const gains = [gain1, gain2, gain3, gain4, gain5];
-const pans = [pan1, pan2, pan3, pan4, pan5];
+const sine6 = audioContext.createOscillator();
+const gain6 = audioContext.createGain();
+// const pan6 = audioContext.createStereoPanner();
+
+
+const oscillators = [sine1, sine2, sine3, sine4, sine5, sine6];
+const carriers = [sine1, sine2, sine3];
+const mods = [sine4, sine5, sine6];
+const gains = [gain1, gain2, gain3, gain4, gain5, gain6];
+const pans = [pan1, pan2, pan3];
 
 
 // LFOs
@@ -57,14 +64,27 @@ const master = audioContext.createGain();
 // initalise master at 0 volume
 master.gain.setValueAtTime(0, audioContext.currentTime);
 
-
+// unused while trying out FM
 // ROUTE:  Oscillators > Gains > Pans > Master
-for (let i = 0; i < oscillators.length; i++){
-  oscillators[i].connect(gains[i]);
+// for (let i = 0; i < oscillators.length; i++){
+//   oscillators[i].connect(gains[i]);
+//   gains[i].connect(pans[i]);
+//   gains[i].gain = 0.2;
+//   pans[i].connect(master);
+// }
+
+gains.forEach(gain => gain.gain = 0.2);
+
+for (let i = 0; i < carriers.length; i++){
+  carriers[i].connect(gains[i]);
   gains[i].connect(pans[i]);
-  gains[i].gain = 0.2;
+  mods[i].connect(gains[i + 3]);
+  gains[i + 3].connect(carriers[i].detune);
   pans[i].connect(master);
 }
+
+
+
 
 master.connect(audioContext.destination);
 
@@ -215,13 +235,22 @@ const setMusicParameters = function(weather){
 
   // ATMOSPERIC PRESSURE
   // sets Base Freq
-  const freq = scaleInput(weather.pressure, 956, 1053, 80, 500);
+  let freq = scaleInput(weather.pressure, 956, 1053, 80, 500);
   sine1.frequency.value = freq;
 
+
   // Hard Coded Intervals
-  const intervals = [1, 1.333, 1.5, 1.875, 2];
-  for (let i = 0; i < oscillators.length; i++){
-    oscillators[i].frequency.value = freq * intervals[i];
+  const intervals = [1, 1.333, 1.5, 1.875, 2, 3];
+  for (let i = 0; i < carriers.length; i++){
+    carriers[i].frequency.value = freq * intervals[i];
+  }
+
+  for (let i = 0; i < mods.length; i++){
+    mods[i].frequency.value = freq * intervals[i + 3];
+  }
+
+  for (let i = 0; i < mods.length; i++){
+    gains[i + 3].gain.value = 5;
   }
 
   // WIND SPEED
