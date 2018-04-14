@@ -95,6 +95,26 @@ const initializeCityList = function(){
   }
 
 }
+
+const getCityWeather = function(){
+
+  const cityId = this.value;
+
+  const requestURL = makeUrl(cityId);
+
+  makeRequest(requestURL, getWeatherData)
+
+}
+
+const makeUrl = function(cityId){
+
+  const prefix = "http://api.openweathermap.org/data/2.5/forecast?id=";
+  const suffix = "&APPID=d7d64ab41161dd5f312ccbe208418afe";
+  const url = prefix.concat(cityId, suffix);
+  return url;
+
+}
+
 /// API REQUESTS
 
 const makeRequest = function(url, callback){
@@ -111,10 +131,10 @@ const getWeatherData = function(){
 
   if(this.status !== 200) return;   // Check if response has worked
   const jsonString = this.responseText;
-  const glasgowWeather = JSON.parse(jsonString);
+  const weather = JSON.parse(jsonString);
 
   // Get Useful Weather DATA
-  const weatherData = getCurrentWeather(glasgowWeather);
+  const weatherData = getCurrentWeather(weather);
 
   // generate HTML tags
   makeCurrentWeatherHTML(weatherData);
@@ -255,11 +275,11 @@ var app = function(){
   initializeCityList();
 
   const citySelect = document.getElementById('cities-list');
-  // get change
+  citySelect.addEventListener('change', getCityWeather);
 
 
-  const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
-  makeRequest(glasgowWeatherURL, getWeatherData);
+  // const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
+  // makeRequest(glasgowWeatherURL, getWeatherData);
 
 //  start the oscillators onLoad
   oscillators.forEach(sine => sine.start());
