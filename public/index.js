@@ -181,22 +181,23 @@ const makeCurrentWeatherHTML = function(weather){
   const currentForecastTag = document.getElementById('current-weather-forecast');
 
   // clear Previous data
-  currentForecastTag.innerHTML = "";
+  // currentForecastTag.innerHTML = "";
 
   // // PLACE NAME
-  const locationTag = document.createElement('h3');
+  const locationTag = document.getElementById('locationTag');
   locationTag.innerText = weather.placeName;
 
-  const timeTag = document.createElement('h4');
+  const timeTag = document.getElementById('timeTag');
   timeTag.innerHTML = weather.forecastTime;
 
-  const weatherTypeTag = document.createElement('h4');
+  const weatherTypeTag = document.getElementById('weatherTypeTag');
   weatherTypeTag.innerText = weather.weatherType;
 
   const statsArray = [weather.temp, weather.pressure, weather.humid, weather.clouds, weather.rain, weather.windSpeed, weather.windDeg];
   const statsLabels = ['Temp: ', "Pressure: ", "Humid: ", "Clouds: ", "Rain: ", "Wind Speed: ", "Wind Deg: "]
 
-  const ul = document.createElement('stats-list');
+  const ul = document.getElementById('stats-list');
+  ul.innerHTML = '';
 
   for(let i = 0; i < statsArray.length; i++){
     const li = document.createElement('li');
