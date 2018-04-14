@@ -1,3 +1,5 @@
+
+
 // AUDIO SETUP
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext);
@@ -77,6 +79,22 @@ const stopAudio = function(){
   master.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 2);
 }
 
+
+
+// CITY DATA
+const initializeCityList = function(){
+
+  // console.log(cityList[0]);
+  const citySelect = document.getElementById('cities-list');
+
+  for (let i = 0; i < 200; i++){
+    let option = document.createElement('option');
+    option.value = cityList[i].id;
+    option.innerText = cityList[i].name;
+    citySelect.appendChild(option);
+  }
+
+}
 /// API REQUESTS
 
 const makeRequest = function(url, callback){
@@ -184,7 +202,7 @@ const setMusicParameters = function(weather){
 
   // WIND SPEED
   // sets LFO Freq
-  const lfoFreq = scaleInput(weather.windSpeed, 0.0, 22, 0.06, 3);
+  const lfoFreq = scaleInput(weather.windSpeed, 0.0, 22, 0.01, 3);
   lfo1.frequency.value = lfoFreq;
   lfo2.frequency.value = lfoFreq * -1.278;
 
@@ -233,6 +251,12 @@ const scaleInput = function(inAmt, inMin, inMax, outMin, outMax){
 
 
 var app = function(){
+
+  initializeCityList();
+
+  const citySelect = document.getElementById('cities-list');
+  // get change
+
 
   const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
   makeRequest(glasgowWeatherURL, getWeatherData);
