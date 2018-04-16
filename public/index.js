@@ -26,6 +26,8 @@ const gain5 = audioContext.createGain();
 const pan5 = audioContext.createStereoPanner();
 
 const oscillators = [sine1, sine2, sine3, sine4, sine5];
+
+oscillators.forEach(osc => osc.type = 'triangle');
 const gains = [gain1, gain2, gain3, gain4, gain5];
 const pans = [pan1, pan2, pan3, pan4, pan5];
 
@@ -222,6 +224,7 @@ const getCurrentWeather = function(weather) {
   const currentWeather = weather.list[0];
   const stats = currentWeather.main;
 
+  const weatherData = {};
 
   // name
   weatherData.placeName = weather.city.name;
@@ -281,7 +284,7 @@ const setMusicParameters = function(weather){
 
   // ATMOSPERIC PRESSURE
   // sets Base Freq
-  const freq = scaleInput(weather.pressure, 956, 1053, 80, 500);
+  const freq = scaleInput(weather.pressure, 956, 1053, 80, 400);
   sine1.frequency.value = freq;
 
   // Hard Coded Intervals
@@ -343,6 +346,8 @@ const scaleInput = function(inAmt, inMin, inMax, outMin, outMax){
 
 
 var app = function(){
+
+  const weatherTable = document.getElementById('current-weather-forecast');
 
   initializeCityList();
 
