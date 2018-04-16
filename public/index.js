@@ -133,8 +133,9 @@ const getWeatherData = function(){
   const jsonString = this.responseText;
   const weather = JSON.parse(jsonString);
 
-  const weather24 = get24HoursWeather(weather);
-  debugger;
+  // const weather24 = get24HoursWeather(weather);
+
+  // makeWeatherGraphs(weather24);
   // Get Useful Weather DATA
   const weatherData = getCurrentWeather(weather);
 
@@ -150,43 +151,69 @@ const getWeatherData = function(){
 
 }
 
-const get24HoursWeather = function(weather){
-  
-  const weather24 = [];
-  for (let i = 0; i < 8; i++){
-    weather24.push(weather.list[i]);
-  }
+// UNUSED - for CHART DISPLAY
+// const get24HoursWeather = function(weather){
+//
+//   const weather24 = [];
+//   for (let i = 0; i < 8; i++){
+//     weather24.push(weather.list[i]);
+//   }
+//
+//   const weatherData = {};
+//   // name
+//   weatherData.placeName = weather.city.name;
+//   // // time
+//   weatherData.forecastTimes = [];
+//   weatherData.weatherType = [];
+//   weatherData.temps = [];
+//   weatherData.pressures = [];
+//   weatherData.humids = [];
+//   weatherData.clouds = [];
+//   weatherData.rains = [];
+//   weatherData.windSpeeds = [];
+//   weatherData.windDegs = [];
+//
+//   weather24.forEach(forecast => {
+//     weatherData.forecastTimes.push(forecast.dt_txt);
+//     weatherData.weatherType.push(forecast.weather[0].main)
+//     weatherData.temps.push(forecast.main.temp);
+//     weatherData.pressures.push(forecast.main.pressure);
+//     weatherData.humids.push(forecast.main.humidity);
+//     weatherData.clouds.push(forecast.clouds.all);
+//     weatherData.rains.push(forecast.rain['3h']);
+//     weatherData.windSpeeds.push(forecast.wind.speed);
+//     weatherData.windDegs.push(forecast.wind.deg);
+//   })
+//
+//   return weatherData;
+//
+// }
 
-  const weatherData = {};
-  // name
-  weatherData.placeName = weather.city.name;
-  // // time
-  weatherData.forecastTimes = [];
-  weatherData.weatherType = [];
-  weatherData.temps = [];
-  weatherData.pressures = [];
-  weatherData.humids = [];
-  weatherData.clouds = [];
-  weatherData.rains = [];
-  weatherData.windSpeeds = [];
-  weatherData.windDegs = [];
-
-  weather24.forEach(forecast => {
-    weatherData.forecastTimes.push(forecast.dt_txt);
-    weatherData.weatherType.push(forecast.weather[0].main)
-    weatherData.temps.push(forecast.main.temp);
-    weatherData.pressures.push(forecast.main.pressure);
-    weatherData.humids.push(forecast.main.humidity);
-    weatherData.clouds.push(forecast.clouds.all);
-    weatherData.rains.push(forecast.rain['3h']);
-    weatherData.windSpeeds.push(forecast.wind.speed);
-    weatherData.windDegs.push(forecast.wind.deg);
-  })
-
-  return weatherData;
-
-}
-
+// UNUSED - NOT WORKING, NOT ENOUGH TIME
+// const makeWeatherGraphs = function(weather){
+//
+//   google.charts.load('current', {'packages':['corechart']});
+//       google.charts.setOnLoadCallback(function (weather24){
+//
+//         const pressureChartData = [];
+//         for (let i = 0; i < weather.forecastTimes; i++){
+//           pressureChartData.push([weather.forecastTime[i], weather.pressures[i]])
+//         }
+//
+//         const data = google.visualization.arrayToDataTable(pressureChartData);
+//
+//         var options = {
+//           title: 'Pressure',
+//           curveType: 'function',
+//           legend: { position: 'bottom' }
+//         };
+//
+//         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+//
+//         chart.draw(data, options);
+//
+//   });
+// }
 
 const getCurrentWeather = function(weather) {
 //  Translates API data into useful format, returns an object
@@ -312,31 +339,7 @@ const scaleInput = function(inAmt, inMin, inMax, outMin, outMax){
 // WIND .wind
 // RAIN .rain
 
-const loadCharts = function(){
 
-  google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-        function drawChart() {
-          var data = google.visualization.arrayToDataTable([
-            ['Year', 'Sales', 'Expenses'],
-            ['2004',  1000,      400],
-            ['2005',  1170,      460],
-            ['2006',  660,       1120],
-            ['2007',  1030,      540]
-          ]);
-
-          var options = {
-            title: 'Temp',
-            curveType: 'function',
-            legend: { position: 'bottom' }
-          };
-
-          var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
-          chart.draw(data, options);
-        }
-}
 
 
 var app = function(){
@@ -346,7 +349,6 @@ var app = function(){
   const citySelect = document.getElementById('cities-list');
   citySelect.addEventListener('change', getCityWeather);
 
-  loadCharts();
 
   // const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
   // makeRequest(glasgowWeatherURL, getWeatherData);
