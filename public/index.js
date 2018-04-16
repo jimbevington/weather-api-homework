@@ -185,13 +185,13 @@ const makeCurrentWeatherHTML = function(weather){
 
   // // PLACE NAME
   const locationTag = document.getElementById('locationTag');
-  locationTag.innerText = weather.placeName;
+  locationTag.innerHTML = `<h2>${weather.placeName}</h2>`;
 
   const timeTag = document.getElementById('timeTag');
   timeTag.innerHTML = weather.forecastTime;
 
   const weatherTypeTag = document.getElementById('weatherTypeTag');
-  weatherTypeTag.innerText = weather.weatherType;
+  weatherTypeTag.innerHTML = weather.weatherType;
 
   const statsArray = [weather.temp, weather.pressure, weather.humid, weather.clouds, weather.rain, weather.windSpeed, weather.windDeg];
   const statsLabels = ['Temp: ', "Pressure: ", "Humid: ", "Clouds: ", "Rain: ", "Wind Speed: ", "Wind Deg: "]
@@ -273,6 +273,32 @@ const scaleInput = function(inAmt, inMin, inMax, outMin, outMax){
 // WIND .wind
 // RAIN .rain
 
+const loadCharts = function(){
+
+  google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+          var data = google.visualization.arrayToDataTable([
+            ['Year', 'Sales', 'Expenses'],
+            ['2004',  1000,      400],
+            ['2005',  1170,      460],
+            ['2006',  660,       1120],
+            ['2007',  1030,      540]
+          ]);
+
+          var options = {
+            title: 'Temp',
+            curveType: 'function',
+            legend: { position: 'bottom' }
+          };
+
+          var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+          chart.draw(data, options);
+        }
+}
+
 
 var app = function(){
 
@@ -281,6 +307,7 @@ var app = function(){
   const citySelect = document.getElementById('cities-list');
   citySelect.addEventListener('change', getCityWeather);
 
+  loadCharts();
 
   // const glasgowWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?id=3333231&APPID=d7d64ab41161dd5f312ccbe208418afe";
   // makeRequest(glasgowWeatherURL, getWeatherData);

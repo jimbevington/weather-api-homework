@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Country App</title>
+    <title>Listen To the Weather</title>
     <script src='cityList.js'></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src='index.js'></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
 
   <div class="container">
 
-    <select name="cities-list" id="cities-list"></select>
+    <h1 class="title">Listen to the Weather</h1>
 
-    <h1>Listen to the Weather</h1>
+    <div>
+      Choose Location:
+      <select class="inline-block" name="cities-list" id="cities-list"></select>
+    </div>
 
     <table id="current-weather-forecast">
 
-    <tr>
-      <td class="inline-block" id="locationTag"></td>
-      <td class="inline-block" id="timeTag"></td>
-    </tr>
+      <tr>
+        <td id="locationTag"></td>
+        <td id="timeTag"></td>
+      </tr>
 
-    <tr>
-    <td><span id="weatherTypeTag"></span></td>
-    <td><ul id="stats-list"></ul></td>
-    </tr>
+      <tr>
+      <td><span id="weatherTypeTag"></span></td>
+      <td><ul id="stats-list"></ul></td>
+      </tr>
 
     </table>
+
+    <div id="curve_chart"></div>
 
     <div id="audio-controls">
       <button id="play-button">Play</button>

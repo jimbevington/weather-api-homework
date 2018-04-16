@@ -1,12 +1,46 @@
 body {
-  /* background-color: tomato; */
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+}
+
+
+table {
+  border-collapse: collapse;
+}
+
+td, tr {
+  padding:15px;
+  border: solid #3d4044 2px;
+}
+
+.container {
+  display:flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.title {
+  font-weight: lighter;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+#cities-list{
+  margin-left: 10px;
+  margin-bottom: 20px;
 }
 
 #forecast {
   display:block;
 }
 
-/* .inline-block {
-  display: inline-block;
-  margin:3em;
-} */
+#current-weather-forecast {
+  background-color: skyblue;
+}
+
+#weatherTypeTag {
+  font-style: italic;
+  font-size: 2em;
+}
