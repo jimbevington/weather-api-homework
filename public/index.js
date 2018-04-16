@@ -133,6 +133,8 @@ const getWeatherData = function(){
   const jsonString = this.responseText;
   const weather = JSON.parse(jsonString);
 
+  const weather24 = get24HoursWeather(weather);
+  debugger;
   // Get Useful Weather DATA
   const weatherData = getCurrentWeather(weather);
 
@@ -148,6 +150,43 @@ const getWeatherData = function(){
 
 }
 
+const get24HoursWeather = function(weather){
+  
+  const weather24 = [];
+  for (let i = 0; i < 8; i++){
+    weather24.push(weather.list[i]);
+  }
+
+  const weatherData = {};
+  // name
+  weatherData.placeName = weather.city.name;
+  // // time
+  weatherData.forecastTimes = [];
+  weatherData.weatherType = [];
+  weatherData.temps = [];
+  weatherData.pressures = [];
+  weatherData.humids = [];
+  weatherData.clouds = [];
+  weatherData.rains = [];
+  weatherData.windSpeeds = [];
+  weatherData.windDegs = [];
+
+  weather24.forEach(forecast => {
+    weatherData.forecastTimes.push(forecast.dt_txt);
+    weatherData.weatherType.push(forecast.weather[0].main)
+    weatherData.temps.push(forecast.main.temp);
+    weatherData.pressures.push(forecast.main.pressure);
+    weatherData.humids.push(forecast.main.humidity);
+    weatherData.clouds.push(forecast.clouds.all);
+    weatherData.rains.push(forecast.rain['3h']);
+    weatherData.windSpeeds.push(forecast.wind.speed);
+    weatherData.windDegs.push(forecast.wind.deg);
+  })
+
+  return weatherData;
+
+}
+
 
 const getCurrentWeather = function(weather) {
 //  Translates API data into useful format, returns an object
@@ -156,7 +195,7 @@ const getCurrentWeather = function(weather) {
   const currentWeather = weather.list[0];
   const stats = currentWeather.main;
 
-  const weatherData = {};
+
   // name
   weatherData.placeName = weather.city.name;
   // time
